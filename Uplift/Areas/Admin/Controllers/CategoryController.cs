@@ -23,5 +23,31 @@ namespace Uplift.Areas.Admin.Controllers
         {
             return View();
         }
+
+
+        #region API CALLS
+
+        [HttpGet]
+        public IActionResult GetAll()
+        {
+            return Json(new { data = _unitOfWork.Category.GetAll() });
+        }
+
+        [HttpDelete]
+        public IActionResult Delete(int id)
+        {
+            var categoryToDelete = _unitOfWork.Category.Get(id);
+            if (categoryToDelete == null)
+            {
+                return Json(new { success = false, message = $"Error! no category with the id {id} was found" });
+            }
+
+            _unitOfWork.Category.Remove(categoryToDelete);
+            _unitOfWork.SaveChanges();
+
+            return Json(new { success = true, message = "Delete successful" });
+        }
+
+        #endregion
     }
 }
