@@ -19,10 +19,13 @@ namespace Uplift.DataAccess.Data.Repository
         {
             var catToUpdate = _db.Categories.FirstOrDefault(cat => cat.Id == category.Id);
 
-            catToUpdate.Name = category.Name;
-            catToUpdate.DisplayOrder = category.DisplayOrder;
+            if (catToUpdate != null)
+            {
+                catToUpdate.Name = category.Name;
 
-            _db.SaveChanges();
+                catToUpdate.DisplayOrder = category.DisplayOrder;
+                _db.SaveChanges();
+            }
         }
 
         public IEnumerable<SelectListItem> GetCategoriesForDropdown()
@@ -31,7 +34,6 @@ namespace Uplift.DataAccess.Data.Repository
             {
                 Text = item.Name,
                 Value = item.Id.ToString()
-
             });
         }
     }

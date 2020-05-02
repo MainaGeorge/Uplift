@@ -11,8 +11,8 @@ namespace Uplift.DataAccess.Data.Repository
     {
 
         protected readonly DbContext Context;
-        internal DbSet<T> DbSet;
 
+        internal DbSet<T> DbSet;
 
         public Repository(DbContext context)
         {

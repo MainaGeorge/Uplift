@@ -6,6 +6,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Uplift.DataAccess.Data;
+using Uplift.DataAccess.Data.Repository;
+using Uplift.DataAccess.Data.Repository.IRepository;
 
 namespace Uplift
 {
@@ -26,11 +28,15 @@ namespace Uplift
                     Configuration.GetConnectionString("DefaultConnection")));
 
 
-            services.AddDefaultIdentity<IdentityUser>()
+            services.AddIdentity<IdentityUser, IdentityRole>()
+                .AddDefaultTokenProviders()
+                .AddDefaultUI()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             services.AddControllersWithViews()
+                .AddNewtonsoftJson()
                 .AddRazorRuntimeCompilation();
             services.AddRazorPages();
         }
