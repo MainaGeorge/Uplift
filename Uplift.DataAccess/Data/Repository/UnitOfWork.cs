@@ -10,6 +10,7 @@ namespace Uplift.DataAccess.Data.Repository
         {
             _db = db;
             Category = new CategoryRepository(db);
+            Frequency = new FrequencyRepository(db);
         }
         public void Dispose()
         {
@@ -23,5 +24,6 @@ namespace Uplift.DataAccess.Data.Repository
         }
 
         public ICategoryRepository Category { get; private set; }
+        public IFrequencyRepository Frequency { get; private set; }
     }
 }

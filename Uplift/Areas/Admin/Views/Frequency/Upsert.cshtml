@@ -1,6 +1,6 @@
-﻿@model Uplift.Models.Category
+﻿@model Uplift.Models.Frequency
 @{
-    var title = "Create Category";
+    var title = "Create Frequency";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -12,7 +12,7 @@
         @if (Model.Id != 0)
         {
             <input asp-for="Id" type="hidden" />
-            title = "Edit Category";
+            title = "Edit Frequency";
         }
 
         <div class="col-12 mb-4 text-center">
@@ -32,11 +32,11 @@
 
             <div class="row form-group">
                 <div class="col-4">
-                    <label asp-for="DisplayOrder"></label>
+                    <label asp-for="FrequencyCount"></label>
                 </div>
                 <div class="col-8">
-                    <input asp-for="DisplayOrder" class="form-control" />
-                    <span asp-validation-for="DisplayOrder" class="d-block text-danger"></span>
+                    <input asp-for="FrequencyCount" class="form-control" />
+                    <span asp-validation-for="FrequencyCount" class="d-block text-danger"></span>
                 </div>
             </div>
 

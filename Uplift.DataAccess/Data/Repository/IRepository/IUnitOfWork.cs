@@ -7,6 +7,7 @@ namespace Uplift.DataAccess.Data.Repository.IRepository
         void SaveChanges();
 
         ICategoryRepository Category { get; }
+        IFrequencyRepository Frequency { get; }
 
     }
 }
