@@ -23,17 +23,17 @@ namespace Uplift.Areas.Admin.Controllers
         }
 
 
-        [HttpGet]
-        public IActionResult Upsert(int? categoryId)
+
+        public IActionResult Upsert(int? id)
         {
             var category = new Category();
 
-            if (categoryId == null)
+            if (id == null)
             {
                 return View(category);
             }
 
-            category = _unitOfWork.Category.Get(categoryId.Value);
+            category = _unitOfWork.Category.Get(id.GetValueOrDefault());
 
             if (category == null)
                 return NotFound();
