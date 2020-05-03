@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Uplift.DataAccess.Data.Repository.IRepository;
+using Uplift.Models;
 
 namespace Uplift.Areas.Admin.Controllers
 {
@@ -21,7 +18,51 @@ namespace Uplift.Areas.Admin.Controllers
 
         public IActionResult Index()
         {
+
             return View();
+        }
+
+
+        [HttpGet]
+        public IActionResult Upsert(int? categoryId)
+        {
+            var category = new Category();
+
+            if (categoryId == null)
+            {
+                return View(category);
+            }
+
+            category = _unitOfWork.Category.Get(categoryId.Value);
+
+            if (category == null)
+                return NotFound();
+
+
+            return View(category);
+
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Upsert(Category category)
+        {
+            if (!ModelState.IsValid) return View(category);
+
+
+            if (category.Id == 0)
+            {
+                _unitOfWork.Category.Add(category);
+            }
+            else
+            {
+                _unitOfWork.Category.Update(category);
+            }
+
+            _unitOfWork.SaveChanges();
+
+            return RedirectToAction(nameof(Index));
+
         }
 
 
