@@ -33,7 +33,24 @@ namespace Uplift.Areas.Admin.Controllers
             return View(frequency);
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Upsert(Frequency frequency)
+        {
+            if (!ModelState.IsValid) return View(frequency);
 
+            if (frequency.Id == 0)
+            {
+                _unitOfWork.Frequency.Add(frequency);
+            }
+            else
+            {
+                _unitOfWork.Frequency.Update(frequency);
+            }
+
+            _unitOfWork.SaveChanges();
+            return RedirectToAction(nameof(Index));
+        }
 
 
         #region APICALLS
