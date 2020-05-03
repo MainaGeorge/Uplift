@@ -6,7 +6,7 @@
 
 
 <form asp-action="Upsert" method="post" enctype="multipart/form-data">
-    <div class="backgroundWhite border mx-2 px-2">
+    <div class="row backgroundWhite border mx-2 px-2">
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
         @if (Model.Service.Id != 0)
@@ -107,8 +107,8 @@
         @if (Model.Service.Id != 0)
         {
             <div class="col-3">
-                <img src="@Model.Service.ImageUrl" alt="service image" asp-append-version="true" style="border-radius: 5px; width: 100%;
-                                  border: solid 1px #bbb9b9" />
+                <img src="@Model.Service.ImageUrl" alt="service image" asp-append-version="true"
+                     style="border-radius: 5px; width: 100%; height: 100%;  border: solid 1px #bbb9b9" />
             </div>
         }
 
