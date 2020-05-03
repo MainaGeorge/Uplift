@@ -1,0 +1,141 @@
+﻿@model Uplift.Models.ViewModels.ServiceViewModel
+@{
+    var title = "Create Service";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<form asp-action="Upsert" method="post" enctype="multipart/form-data">
+    <div class="backgroundWhite border mx-2 px-2">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+        @if (Model.Service.Id != 0)
+        {
+            <input asp-for="Service.Id" type="hidden" />
+            title = "Edit Service";
+        }
+
+        <div class="col-12 mb-4 text-center">
+            <h2 class="text-primary">@title</h2>
+        </div>
+
+        <div class="col-9">
+            <div class="row form-group">
+                <div class="col-4">
+                    <label asp-for="Service.Name"></label>
+                </div>
+                <div class="col-8">
+                    <input asp-for="Service.Name" class="form-control" />
+                    <span asp-validation-for="Service.Name" class="d-block text-danger"></span>
+                </div>
+            </div>
+
+            <div class="row form-group">
+                <div class="col-4">
+                    <label asp-for="Service.Price"></label>
+                </div>
+                <div class="col-8">
+                    <input asp-for="Service.Price" class="form-control" id="price" />
+                    <span asp-validation-for="Service.Price" class="d-block text-danger"></span>
+                </div>
+            </div>
+
+
+            <div class="row form-group">
+                <div class="col-4">
+                    <label asp-for="Service.LongDescription"></label>
+                </div>
+                <div class="col-8">
+                    <input asp-for="Service.LongDescription" class="form-control" />
+                    <span asp-validation-for="Service.LongDescription" class="d-block text-danger"></span>
+                </div>
+            </div>
+
+
+            <div class="row form-group">
+                <div class="col-4">
+                    <label asp-for="Service.FrequencyId"></label>
+                </div>
+                <div class="col-8">
+                    @Html.DropDownListFor(m => m.Service.FrequencyId, Model.FrequencySelectListItems,
+                        "--select a frequency--", new { @class = "form-control" })
+                </div>
+            </div>
+
+            <div class="row form-group">
+                <div class="col-4">
+                    <label asp-for="Service.CategoryId"></label>
+                </div>
+                <div class="col-8">
+                    @Html.DropDownListFor(m => m.Service.CategoryId, Model.CategorySelectListItems,
+                        "--select a Category--", new { @class = "form-control" })
+                </div>
+            </div>
+
+            <div class="row form-group">
+                <div class="col-4">
+                    <label asp-for="Service.ImageUrl"></label>
+                </div>
+                <div class="col-8">
+                    <input type="file" asp-for="Service.ImageUrl" class="form-control" name="files" multiple id="uploadBox" />
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <div class="col-8 offset-4">
+                    @if (Model.Service.Id != 0)
+                    {
+                        //Edit
+                        <partial name="_EditAndBackToList" model="Model.Service.Id" />
+                    }
+                    else
+                    {
+                        //Create
+                        <div class="row">
+                            <div class="col">
+                                <button type="submit" onclick="return ValidateInput()" class="btn btn-primary form-control">Create</button>
+                            </div>
+                            <div class="col">
+                                <a asp-action="Index" class="btn btn-success form-control">Back to List</a>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+
+        @if (Model.Service.Id != 0)
+        {
+            <div class="col-3">
+                <img src="@Model.Service.ImageUrl" alt="service image" asp-append-version="true" style="border-radius: 5px; width: 100%;
+                                  border: solid 1px #bbb9b9" />
+            </div>
+        }
+
+    </div>
+</form>
+
+
+@section Scripts
+{
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        function ValidateInput() {
+            if (document.getElementById("uploadBox").value.trim() === "") {
+                swal("Error", "please select an image", "error");
+                return false;
+            }
+            return true;
+        }
+
+        $(document).ready(function () {
+            console.log('loaded');
+            if (document.getElementById("price").value == "0") {
+                document.getElementById("price").value = "";
+            }
+        });
+    </script>
+
+
+}
