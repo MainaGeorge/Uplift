@@ -33,9 +33,12 @@ namespace Uplift.Areas.Customer.Controllers
             return View(HomeViewModel);
         }
 
-        public IActionResult Privacy()
+        public IActionResult Details(int id)
         {
-            return View();
+            var serviceFromDb =
+                _unitOfWork.Service.GetFirstOrDefault(includedProperties: "Frequency,Category",
+                    filter: c => c.Id == id);
+            return View(serviceFromDb);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
