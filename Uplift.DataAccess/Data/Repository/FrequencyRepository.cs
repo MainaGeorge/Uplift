@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
 using Uplift.DataAccess.Data.Repository.IRepository;
 using Uplift.Models;
 
@@ -35,7 +32,7 @@ namespace Uplift.DataAccess.Data.Repository
             return _db.Frequency.Select(f => new SelectListItem()
             {
                 Text = f.Name,
-                Value = f.FrequencyCount.ToString()
+                Value = f.Id.ToString()
             });
         }
     }

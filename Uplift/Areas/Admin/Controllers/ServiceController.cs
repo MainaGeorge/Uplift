@@ -51,7 +51,7 @@ namespace Uplift.Areas.Admin.Controllers
         {
             if (ModelState.IsValid)
             {
-                string webRootPath = _webHost.WebRootPath;
+                var webRootPath = _webHost.WebRootPath;
                 var files = HttpContext.Request.Form.Files;
                 if (ServiceViewModel.Service.Id == 0)
                 {
@@ -74,7 +74,7 @@ namespace Uplift.Areas.Admin.Controllers
                     var serviceFromDb = _unitOfWork.Service.Get(ServiceViewModel.Service.Id);
                     if (files.Count > 0)
                     {
-                        string fileName = Guid.NewGuid().ToString();
+                        var fileName = Guid.NewGuid().ToString();
                         var uploads = Path.Combine(webRootPath, @"images\services");
                         var extensionNew = Path.GetExtension(files[0].FileName);
 
@@ -97,6 +97,7 @@ namespace Uplift.Areas.Admin.Controllers
 
                     _unitOfWork.Service.Update(ServiceViewModel.Service);
                 }
+
                 _unitOfWork.SaveChanges();
                 return RedirectToAction(nameof(Index));
             }
