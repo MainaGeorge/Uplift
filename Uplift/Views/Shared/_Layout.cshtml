@@ -1,4 +1,9 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Http
+@using Uplift.Utility
+@using Uplift.ExtensionMethods
+
+@inject IHttpContextAccessor ContextAccessor
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -45,6 +50,27 @@
                         </div>
                     </li>
 
+
+                    @if (ContextAccessor.HttpContext.Session.RetrieveFromSession<List<int>>(AppConstants.ShoppingCart) != null)
+                    {
+                        <li style="color: white">
+                            <a asp-area="Customer" asp-controller="Cart" asp-action="Index" class="nav-link text-white">
+                                @{
+                                    var count = ContextAccessor.HttpContext.Session.RetrieveFromSession<List<int>>(AppConstants.ShoppingCart).Count();
+                                }
+                                <i class="fas fa-shopping-cart"></i> (@count)
+                            </a>
+                        </li>
+                    }
+                    else
+                    {
+                        <li style="color: white">
+                            <a href="#" class="nav-link text-white">
+                                <i class="fas fa-shopping-cart"></i> (0)
+                            </a>
+                        </li>
+                    }
+
                 </ul>
             </div>
             @* </div> *@
@@ -73,6 +99,6 @@
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>
     <script src="https://kit.fontawesome.com/e19c476714.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
-@await RenderSectionAsync("Scripts", required: false)
+    @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

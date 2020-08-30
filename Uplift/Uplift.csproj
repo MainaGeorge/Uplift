@@ -21,6 +21,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Uplift.DataAccess\Uplift.DataAccess.csproj" />
     <ProjectReference Include="..\Uplift.Models\Uplift.Models.csproj" />
+    <ProjectReference Include="..\Uplift.Utility\Uplift.Utility.csproj" />
   </ItemGroup>
 
 </Project>

@@ -95,6 +95,7 @@ namespace Uplift.Areas.Admin.Controllers
             }
         }
 
+        [NonAction]
         private string AddPhotoToImagesFolderAndReturnItsLocation(HttpContext context)
         {
             var imageName = Guid.NewGuid();
@@ -111,6 +112,7 @@ namespace Uplift.Areas.Admin.Controllers
             return imageUrl;
         }
 
+        [NonAction]
         private static void DeleteExistingImageFromFolderInCaseOfEditing(string imageUrl)
         {
             if (System.IO.File.Exists(imageUrl))

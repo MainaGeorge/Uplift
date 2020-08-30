@@ -1,9 +1,13 @@
-﻿using System.Diagnostics;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using System.Collections.Generic;
+using System.Diagnostics;
 using Uplift.DataAccess.Data.Repository.IRepository;
+using Uplift.ExtensionMethods;
 using Uplift.Models;
 using Uplift.Models.ViewModels;
+using Uplift.Utility;
 
 namespace Uplift.Areas.Customer.Controllers
 {
@@ -33,11 +37,31 @@ namespace Uplift.Areas.Customer.Controllers
             return View(HomeViewModel);
         }
 
-        public IActionResult Details(int id)
+        public IActionResult AddToCart(int serviceId)
+        {
+            var sessionList = new List<int>();
+            if (string.IsNullOrWhiteSpace(HttpContext.Session.GetString(AppConstants.ShoppingCart)))
+            {
+                sessionList.Add(serviceId);
+                HttpContext.Session.SaveObjectInSession(AppConstants.ShoppingCart, sessionList);
+            }
+            else
+            {
+                sessionList = HttpContext.Session.RetrieveFromSession<List<int>>(AppConstants.ShoppingCart);
+                if (sessionList.Contains(serviceId)) return RedirectToAction(nameof(Index));
+
+                sessionList.Add(serviceId);
+                HttpContext.Session.SaveObjectInSession(AppConstants.ShoppingCart, sessionList);
+            }
+
+            return RedirectToAction(nameof(Index));
+        }
+
+        public IActionResult Details(int serviceId)
         {
             var serviceFromDb =
                 _unitOfWork.Service.GetFirstOrDefault(includedProperties: "Frequency,Category",
-                    filter: c => c.Id == id);
+                    filter: c => c.Id == serviceId);
             return View(serviceFromDb);
         }
 

@@ -1,10 +1,11 @@
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System;
 using Uplift.DataAccess.Data;
 using Uplift.DataAccess.Data.Repository;
 using Uplift.DataAccess.Data.Repository.IRepository;
@@ -39,6 +40,13 @@ namespace Uplift
                 .AddNewtonsoftJson()
                 .AddRazorRuntimeCompilation();
             services.AddRazorPages();
+
+            services.AddSession(opt =>
+            {
+                opt.IdleTimeout = TimeSpan.FromMinutes(15);
+                opt.Cookie.HttpOnly = true;
+                opt.Cookie.IsEssential = true;
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -57,6 +65,7 @@ namespace Uplift
             }
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+            app.UseSession();
 
             app.UseRouting();
 
@@ -68,7 +77,7 @@ namespace Uplift
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{area=Customer}/{controller=Home}/{action=Index}/{id?}");
-                
+
 
                 endpoints.MapRazorPages();
             });
