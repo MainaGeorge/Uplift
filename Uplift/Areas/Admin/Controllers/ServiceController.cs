@@ -1,7 +1,8 @@
-﻿using System;
-using System.IO;
-using Microsoft.AspNetCore.Hosting;
+﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System;
+using System.IO;
 using Uplift.DataAccess.Data.Repository.IRepository;
 using Uplift.Models;
 using Uplift.Models.ViewModels;
@@ -51,20 +52,13 @@ namespace Uplift.Areas.Admin.Controllers
         {
             if (ModelState.IsValid)
             {
-                var webRootPath = _webHost.WebRootPath;
-                var files = HttpContext.Request.Form.Files;
+                var uploadedImages = HttpContext.Request.Form.Files;
+
                 if (ServiceViewModel.Service.Id == 0)
                 {
-                    //New Service
-                    var fileName = Guid.NewGuid().ToString();
-                    var uploads = Path.Combine(webRootPath, @"images\services");
-                    var extension = Path.GetExtension(files[0].FileName);
+                    var imageUrl = AddPhotoToImagesFolderAndReturnItsLocation(HttpContext);
 
-                    using (var fileStreams = new FileStream(Path.Combine(uploads, fileName + extension), FileMode.Create))
-                    {
-                        files[0].CopyTo(fileStreams);
-                    }
-                    ServiceViewModel.Service.ImageUrl = @"\images\services\" + fileName + extension;
+                    ServiceViewModel.Service.ImageUrl = imageUrl;
 
                     _unitOfWork.Service.Add(ServiceViewModel.Service);
                 }
@@ -72,23 +66,15 @@ namespace Uplift.Areas.Admin.Controllers
                 {
                     //Edit Service
                     var serviceFromDb = _unitOfWork.Service.Get(ServiceViewModel.Service.Id);
-                    if (files.Count > 0)
+                    if (uploadedImages.Count > 0)
                     {
-                        var fileName = Guid.NewGuid().ToString();
-                        var uploads = Path.Combine(webRootPath, @"images\services");
-                        var extensionNew = Path.GetExtension(files[0].FileName);
+                        var imageToBeDeletedUrlPath = Path.Combine(_webHost.WebRootPath, serviceFromDb.ImageUrl.TrimStart('\\'));
 
-                        var imagePath = Path.Combine(webRootPath, serviceFromDb.ImageUrl.TrimStart('\\'));
-                        if (System.IO.File.Exists(imagePath))
-                        {
-                            System.IO.File.Delete(imagePath);
-                        }
+                        DeleteExistingImageFromFolderInCaseOfEditing(imageToBeDeletedUrlPath);
 
-                        using (var fileStreams = new FileStream(Path.Combine(uploads, fileName + extensionNew), FileMode.Create))
-                        {
-                            files[0].CopyTo(fileStreams);
-                        }
-                        ServiceViewModel.Service.ImageUrl = @"\images\services\" + fileName + extensionNew;
+                        var newImageUrl = AddPhotoToImagesFolderAndReturnItsLocation(HttpContext);
+
+                        ServiceViewModel.Service.ImageUrl = newImageUrl;
                     }
                     else
                     {
@@ -109,7 +95,29 @@ namespace Uplift.Areas.Admin.Controllers
             }
         }
 
+        private string AddPhotoToImagesFolderAndReturnItsLocation(HttpContext context)
+        {
+            var imageName = Guid.NewGuid();
+            var imageFolder = Path.Combine(_webHost.WebRootPath, @"images\services");
+            var firstImage = context.Request.Form.Files[0];
+            var imageExtension = Path.GetExtension(firstImage.FileName);
 
+            using var fileStreams = new FileStream(Path.Combine(imageFolder, imageName + imageExtension), FileMode.Create);
+
+            firstImage.CopyTo(fileStreams);
+
+            var imageUrl = @"\images\services\" + imageName + imageExtension;
+
+            return imageUrl;
+        }
+
+        private static void DeleteExistingImageFromFolderInCaseOfEditing(string imageUrl)
+        {
+            if (System.IO.File.Exists(imageUrl))
+            {
+                System.IO.File.Delete(imageUrl);
+            }
+        }
 
 
         #region API
@@ -123,7 +131,7 @@ namespace Uplift.Areas.Admin.Controllers
         public IActionResult Delete(int id)
         {
             var toDelete = _unitOfWork.Service.GetFirstOrDefault(s => s.Id == id);
-            
+
             if (toDelete == null)
             {
                 return Json(new { success = false, message = "Something went wrong while deleting" });
@@ -132,16 +140,14 @@ namespace Uplift.Areas.Admin.Controllers
             var webRootPath = _webHost.WebRootPath;
             var imagePath = Path.Combine(webRootPath, toDelete.ImageUrl.TrimStart('\\'));
 
-            if (System.IO.File.Exists(imagePath))
-            {
-                System.IO.File.Delete(imagePath);
-            }
+            DeleteExistingImageFromFolderInCaseOfEditing(imagePath);
 
             _unitOfWork.Service.Remove(toDelete);
             _unitOfWork.SaveChanges();
 
             return Json(new { success = true, message = "deleted successfully" });
         }
+
         #endregion
     }
 }
