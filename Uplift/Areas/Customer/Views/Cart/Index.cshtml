@@ -1,1 +1,46 @@
-﻿
+﻿@model Uplift.Models.ViewModels.CartViewModel
+
+
+<form method="post">
+    <div class="backgroundWhite container">
+        <div class="card">
+            <div class="card-header bg-dark text-light ml-0 row container">
+                <div class="col-12 d-none d-md-block pb-1 col-md-6">
+                    <i class="fas fa-shopping-cart"></i> &nbsp; Shopping Cart
+                </div>
+                <div class="col-12 col-md-4 offset-md-2 text-right">
+                    <a asp-controller="Home" asp-area="Customer" asp-action="Index" class="btn btn-sm btn-outline-info">
+                        Back to services
+                    </a>
+                </div>
+            </div>
+            <div class="card-body">
+                @foreach (var service in Model.ServicesInCart)
+                {
+                    <div class="row">
+                        <div class="d-none d-md-block col-md-2 text-center py-2">
+                            <img src="@service.ImageUrl" alt="service image" width="100%" class="rounded" />
+                        </div>
+                        <div class="col-md-5 col-12 text-md-left pt-3">
+                            <h5> <strong class="text-primary">@service.Name</strong></h5>
+                            <h5> <strong class="text-secondary">$@service.Price</strong></h5>
+                            <h5> <small class="text-secondary">@service.Frequency.Name</small></h5>
+                        </div>
+                        <div class="col-12 col-md-5 row pt-3">
+                            <div class="col-6 text-md-right" style="padding-top: 5px;">
+                                <h6><strong class="text-danger">@((service.Price * service.Frequency.FrequencyCount).ToString("c"))</strong></h6>
+                            </div>
+                            <div class="col-6 text-right">
+                                <button type="submit" class="btn btn-danger" asp-action="Remove" asp-serviceId="@service.Id">
+                                    <i class="fas fa-trash-alt"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+
+
+</form>
