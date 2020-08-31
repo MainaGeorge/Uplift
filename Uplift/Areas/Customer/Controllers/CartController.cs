@@ -1,5 +1,6 @@
-﻿using System.Collections.Generic;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
+using System.Linq;
 using Uplift.DataAccess.Data.Repository.IRepository;
 using Uplift.ExtensionMethods;
 using Uplift.Models;
@@ -38,7 +39,24 @@ namespace Uplift.Areas.Customer.Controllers
                     .Add(_unitOfWork.Service.GetFirstOrDefault(filter: s => s.Id == serviceId,
                         includedProperties: "Frequency,Category"));
             }
+
+            CartViewModel.TotalPrice = CartViewModel.ServicesInCart.Sum(x => x.Price * x.Frequency.FrequencyCount);
             return View(CartViewModel);
+        }
+
+        public IActionResult Remove(int serviceId)
+        {
+            var listFromSession = HttpContext.Session.RetrieveFromSession<List<int>>(AppConstants.ShoppingCart);
+
+            listFromSession.Remove(serviceId);
+            HttpContext.Session.SaveObjectInSession(AppConstants.ShoppingCart, listFromSession);
+
+            return RedirectToAction(nameof(Index));
+        }
+
+        public IActionResult Summary()
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

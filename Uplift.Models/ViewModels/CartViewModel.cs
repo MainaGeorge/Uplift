@@ -6,6 +6,8 @@ namespace Uplift.Models.ViewModels
     {
         public IList<Service> ServicesInCart { get; set; }
 
-        public OrderHeader OrderHeader { get; set; }    
+        public OrderHeader OrderHeader { get; set; }
+
+        public double TotalPrice { get; set; }  
     }
 }

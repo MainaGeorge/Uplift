@@ -16,18 +16,17 @@ namespace Uplift.DataAccess.Data.Repository
         public void Update(Service service)
         {
             var toUpdate = _db.Service.FirstOrDefault(s => s.Id == service.Id);
-            if (toUpdate != null)
-            {
-                toUpdate.Name = service.Name;
-                toUpdate.CategoryId = service.CategoryId;
-                toUpdate.ImageUrl = service.ImageUrl;
-                toUpdate.Price = service.Price;
-                toUpdate.LongDescription = service.LongDescription;
-                toUpdate.FrequencyId = service.FrequencyId;
+            if (toUpdate == null) return;
+
+            toUpdate.Name = service.Name;
+            toUpdate.CategoryId = service.CategoryId;
+            toUpdate.ImageUrl = service.ImageUrl;
+            toUpdate.Price = service.Price;
+            toUpdate.LongDescription = service.LongDescription;
+            toUpdate.FrequencyId = service.FrequencyId;
 
 
-                _db.SaveChanges();
-            }
+            _db.SaveChanges();
         }
     }
 }
