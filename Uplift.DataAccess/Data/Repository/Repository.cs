@@ -52,7 +52,8 @@ namespace Uplift.DataAccess.Data.Repository
 
             if (includedProperties != null)
             {
-                query = includedProperties.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Aggregate(query, (current, property) => current.Include(property));
+                query = includedProperties.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries)
+                    .Aggregate(query, (current, property) => current.Include(property));
             }
 
             return orderBy != null ? orderBy(query).ToList() : query.ToList();

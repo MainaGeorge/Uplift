@@ -18,13 +18,12 @@ namespace Uplift.DataAccess.Data.Repository
         public void Update(Frequency frequency)
         {
             var frequencyToUpdate = _db.Frequency.FirstOrDefault(f => f.Id == frequency.Id);
-            if (frequencyToUpdate != null)
-            {
-                frequencyToUpdate.Name = frequency.Name;
-                frequencyToUpdate.FrequencyCount = frequency.FrequencyCount;
+            if (frequencyToUpdate == null) return;
 
-                _db.SaveChanges();
-            }
+            frequencyToUpdate.Name = frequency.Name;
+            frequencyToUpdate.FrequencyCount = frequency.FrequencyCount;
+
+            _db.SaveChanges();
         }
 
         public IEnumerable<SelectListItem> GetFrequencyListForDropDown()
