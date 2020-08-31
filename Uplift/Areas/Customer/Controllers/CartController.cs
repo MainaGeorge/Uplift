@@ -28,19 +28,7 @@ namespace Uplift.Areas.Customer.Controllers
         }
         public IActionResult Index()
         {
-            var listServiceIdFromSession =
-                HttpContext.Session.RetrieveFromSession<List<int>>(AppConstants.ShoppingCart);
-
-            if (listServiceIdFromSession == null) return View(CartViewModel);
-
-            foreach (var serviceId in listServiceIdFromSession)
-            {
-                CartViewModel.ServicesInCart
-                    .Add(_unitOfWork.Service.GetFirstOrDefault(filter: s => s.Id == serviceId,
-                        includedProperties: "Frequency,Category"));
-            }
-
-            CartViewModel.TotalPrice = CartViewModel.ServicesInCart.Sum(x => x.Price * x.Frequency.FrequencyCount);
+            SetAndInitializeCartViewModel();
             return View(CartViewModel);
         }
 
@@ -56,7 +44,26 @@ namespace Uplift.Areas.Customer.Controllers
 
         public IActionResult Summary()
         {
-            throw new System.NotImplementedException();
+            SetAndInitializeCartViewModel();
+
+            return View("Checkout",CartViewModel);
+        }
+
+        private void SetAndInitializeCartViewModel()
+        {
+            var listServiceIdFromSession =
+                HttpContext.Session.RetrieveFromSession<List<int>>(AppConstants.ShoppingCart);
+
+            if (listServiceIdFromSession == null) return;
+
+            foreach (var serviceId in listServiceIdFromSession)
+            {
+                CartViewModel.ServicesInCart
+                    .Add(_unitOfWork.Service.GetFirstOrDefault(filter: s => s.Id == serviceId,
+                        includedProperties: "Frequency,Category"));
+            }
+
+            CartViewModel.TotalPrice = CartViewModel.ServicesInCart.Sum(x => x.Price * x.Frequency.FrequencyCount);
         }
     }
 }
