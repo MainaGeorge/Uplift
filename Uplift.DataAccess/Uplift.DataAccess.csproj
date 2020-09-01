@@ -7,6 +7,8 @@
   <ItemGroup>
     <Compile Remove="Migrations\20200831075413_AddingOrderDetailsAndOrderHeaderToDb.cs" />
     <Compile Remove="Migrations\20200831075413_AddingOrderDetailsAndOrderHeaderToDb.Designer.cs" />
+    <Compile Remove="Migrations\20200901073322_UpdatingEmailOnOrderHeader.cs" />
+    <Compile Remove="Migrations\20200901073322_UpdatingEmailOnOrderHeader.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

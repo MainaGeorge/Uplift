@@ -12,6 +12,7 @@ namespace Uplift.Models
         public string Name { get; set; } 
         
         [Required]
+        [DataType(DataType.EmailAddress)]
         public string Email { get; set; }
 
         [Required]
@@ -26,8 +27,12 @@ namespace Uplift.Models
         [Required]
         public string ZipCode { get; set; }
 
+        public int ServiceCount { get; set; }   
+
         public DateTime DateOrdered { get; set; }
+
         public string Status { get; set; }
+
         public string Comments { get; set; }    
     }
 }

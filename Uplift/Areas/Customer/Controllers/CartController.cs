@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System;
+using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Linq;
 using Uplift.DataAccess.Data.Repository.IRepository;
@@ -46,8 +47,44 @@ namespace Uplift.Areas.Customer.Controllers
         {
             SetAndInitializeCartViewModel();
 
-            return View("Checkout",CartViewModel);
+            return View("Checkout", CartViewModel);
         }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [ActionName("Summary")]
+        public IActionResult SummaryPost()
+        {
+            CartViewModel.ServicesInCart = new List<Service>();
+            SetAndInitializeCartViewModel();
+            if (!ModelState.IsValid) return View("Checkout", CartViewModel);
+
+            CartViewModel.OrderHeader.DateOrdered = DateTime.Now;
+            CartViewModel.OrderHeader.Status = AppConstants.StatusSubmitted;
+            CartViewModel.OrderHeader.ServiceCount = CartViewModel.ServicesInCart.Count;
+
+            _unitOfWork.OrderHeader.Add(CartViewModel.OrderHeader);
+            _unitOfWork.SaveChanges();
+
+            foreach (var service in CartViewModel.ServicesInCart)
+            {
+                var orderDetails = new OrderDetails
+                {
+                    ServiceId = service.Id,
+                    ServicePrice = service.Price,
+                    ServiceName = service.Name,
+                    OrderHeaderId = CartViewModel.OrderHeader.Id
+                };
+
+                _unitOfWork.OrderDetails.Add(orderDetails);
+            }
+
+            _unitOfWork.SaveChanges();
+            HttpContext.Session.SaveObjectInSession(AppConstants.ShoppingCart, new List<int>());
+
+            return RedirectToAction("OrderConfirmation", "Cart", new {id = CartViewModel.OrderHeader.Id});
+        }
+
 
         private void SetAndInitializeCartViewModel()
         {
@@ -64,6 +101,11 @@ namespace Uplift.Areas.Customer.Controllers
             }
 
             CartViewModel.TotalPrice = CartViewModel.ServicesInCart.Sum(x => x.Price * x.Frequency.FrequencyCount);
+        }
+
+        public IActionResult OrderConfirmation(int id)
+        {
+            return View(id);
         }
     }
 }

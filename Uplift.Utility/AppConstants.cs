@@ -7,5 +7,9 @@ namespace Uplift.Utility
     public static class AppConstants
     {
         public static string ShoppingCart = "Shopping Cart";
+
+        public static string StatusSubmitted { get; set; }
+        public static string StatusApproved { get; set; }
+        public static string StatusRejected { get; set; }
     }
 }
