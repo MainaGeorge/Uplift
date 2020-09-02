@@ -1,0 +1,73 @@
+﻿@model IEnumerable<Uplift.Models.ApplicationUser>
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<br />
+<br />
+<div class="border backgroundWhite">
+    <div class="row">
+        <div class="col-6">
+            <h2 class="text-info">Employees List</h2>
+        </div>
+        <div class="col-6 text-right">
+            <a asp-area="Identity" asp-page="/Account/Register" class="btn btn-info">
+                <i class="fas fa-plus"></i> &nbsp; Register new employee
+            </a>
+        </div>
+    </div>
+
+    <br />
+    @if (Model.Any())
+    {
+        <table class="table table-striped border">
+            <tr class="table-secondary">
+                <th>
+                    @Html.DisplayNameFor(m => m.Name)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(m => m.Email)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(m => m.PhoneNumber)
+                </th>
+                <th></th>
+            </tr>
+            @foreach (var user in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(m => user.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(m => user.Email)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(m => user.PhoneNumber)
+                    </td>
+                    <td>
+                        @if (user.LockoutEnd == null || user.LockoutEnd < DateTime.Now)
+                        {
+                            <a class="btn btn-success text-white" asp-action="Lock" style="width:50px;" asp-route-userId="@user.Id">
+                                <i class="fas fa-lock-open"></i>
+                            </a>
+                        }
+                        else
+                        {
+                            <a class="btn btn-danger text-white" asp-action="UnLock" style="width:50px;" asp-route-userId="@user.Id">
+                                <i class="fas fa-lock"></i>
+                            </a>
+                        }
+                    </td>
+                </tr>
+            }
+        </table>
+    }
+    else
+    {
+        <p> You don't have any employees yet...</p>
+    }
+
+</div>
+
