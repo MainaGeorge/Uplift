@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using System.Security.Authentication.ExtendedProtection;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Uplift.Models;
 
@@ -20,5 +21,7 @@ namespace Uplift.DataAccess.Data
         public DbSet<OrderDetails> OrderDetails { get; set; }
 
         public DbSet<OrderHeader> OrderHeader { get; set; }
+
+        public DbSet<ApplicationUser> ApplicationUsers { get; set; }    
     }
 }
