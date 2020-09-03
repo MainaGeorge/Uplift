@@ -21,9 +21,7 @@
 </head>
 <body>
     <header>
-
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-            @* <div class="container"> *@
             <a class="navbar-brand" asp-area="Customer" asp-controller="Home" asp-action="Index">Uplift</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor02" aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -38,19 +36,27 @@
                         <a class="nav-link text-light" asp-area="Customer" asp-controller="Home" asp-action="Index">Home</a>
                     </li>
 
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle text-white" href="#" role="button" data-toggle="dropdown"
-                           aria-haspopup="true" id="navbardropdown" aria-expanded="False">Content Manager</a>
+                    @if (User.IsInRole(AppConstants.Admin) || User.IsInRole(AppConstants.Manager))
+                    {
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle text-white" href="#" role="button" data-toggle="dropdown"
+                               aria-haspopup="true" id="navbardropdown" aria-expanded="False">Content Manager</a>
 
-                        <div class="dropdown-menu" aria-labelledby="navbardropdown">
-                            <a class="dropdown-item text-white" asp-area="Admin" asp-controller="Category" asp-action="Index">Category</a>
-                            <a class="dropdown-item text-white" asp-area="Admin" asp-controller="Service" asp-action="Index">Service</a>
-                            <a class="dropdown-item text-white" asp-area="Admin" asp-controller="Frequency" asp-action="Index">Frequency</a>
-                            <a class="dropdown-item text-white" asp-area="Admin" asp-controller="Users" asp-action="Index">Manage Employees</a>
-                            <a class="dropdown-item text-white" asp-area="Admin" asp-controller="Order" asp-action="Index">Manage Orders</a>
+                            <div class="dropdown-menu" aria-labelledby="navbardropdown">
+                                <a class="dropdown-item text-white" asp-area="Admin" asp-controller="Category" asp-action="Index">Category</a>
+                                <a class="dropdown-item text-white" asp-area="Admin" asp-controller="Service" asp-action="Index">Service</a>
+                                <a class="dropdown-item text-white" asp-area="Admin" asp-controller="Frequency" asp-action="Index">Frequency</a>
+                                <a class="dropdown-item text-white" asp-area="Admin" asp-controller="Order" asp-action="Index">Manage Orders</a>
 
-                        </div>
-                    </li>
+                                @if (User.IsInRole(AppConstants.Admin))
+                                {
+                                    <a class="dropdown-item text-white" asp-area="Admin" asp-controller="Users" asp-action="Index">Manage Employees</a>
+                                }
+
+                            </div>
+                        </li>
+                    }
+
 
 
                     @if (ContextAccessor.HttpContext.Session.RetrieveFromSession<List<int>>(AppConstants.ShoppingCart) != null)
@@ -75,7 +81,6 @@
 
                 </ul>
             </div>
-            @* </div> *@
         </nav>
 
     </header>

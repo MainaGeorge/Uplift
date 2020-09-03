@@ -3,12 +3,14 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.IO;
+using Microsoft.AspNetCore.Authorization;
 using Uplift.DataAccess.Data.Repository.IRepository;
 using Uplift.Models;
 using Uplift.Models.ViewModels;
 
 namespace Uplift.Areas.Admin.Controllers
 {
+    [Authorize]
     [Area("Admin")]
     public class ServiceController : Controller
     {

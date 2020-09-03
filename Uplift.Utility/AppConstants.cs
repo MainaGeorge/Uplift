@@ -8,5 +8,7 @@
         public static string StatusRejected { get; set; } = "rejected";
         public static string Admin { get; set; } = "Admin";
         public static string Manager { get; set; } = "Manager";
+
+        public static string GetCategoryStoredProcedure { get; set; } = "GET_CATEGORIES";
     }
 }
