@@ -9,6 +9,8 @@
     <Compile Remove="Migrations\20200831075413_AddingOrderDetailsAndOrderHeaderToDb.Designer.cs" />
     <Compile Remove="Migrations\20200901073322_UpdatingEmailOnOrderHeader.cs" />
     <Compile Remove="Migrations\20200901073322_UpdatingEmailOnOrderHeader.Designer.cs" />
+    <Compile Remove="Migrations\20200903134135_AddingAdminUser.cs" />
+    <Compile Remove="Migrations\20200903134135_AddingAdminUser.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

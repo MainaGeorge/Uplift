@@ -1,8 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Linq;
 using Microsoft.Extensions.Configuration;
+using System.Linq;
 using Uplift.DataAccess.Data.Repository.IRepository;
 using Uplift.Models;
 using Uplift.Utility;
@@ -28,19 +26,19 @@ namespace Uplift.DataAccess.Data.Repository
         }
         public void InitializeDatabase()
         {
-            try
-            {
-                if (_db.Database.GetPendingMigrations().Any())
-                {
-                    _db.Database.Migrate();
-                }
-            }
-            catch (Exception)
-            {
-                Console.WriteLine("error occurred");
-            }
+            // try
+            // {
+            //     if (_db.Database.GetPendingMigrations().Any())
+            //     {
+            //         _db.Database.Migrate();
+            //     }
+            // }
+            // catch (Exception)
+            // {
+            //     Console.WriteLine("error occurred");
+            // }
 
-            if (_db.Roles.Any(r => r.Name == AppConstants.Admin)) return;
+            if (!_db.Roles.Any(r => r.Name == AppConstants.Admin)) return;
 
             _roleManager.CreateAsync(new IdentityRole(AppConstants.Admin)).GetAwaiter().GetResult();
             _roleManager.CreateAsync(new IdentityRole(AppConstants.Manager)).GetAwaiter().GetResult();

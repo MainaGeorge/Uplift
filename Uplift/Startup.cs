@@ -65,13 +65,14 @@ namespace Uplift
                 app.UseHsts();
             }
 
-            databaseInitializer.InitializeDatabase();
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseSession();
 
             app.UseRouting();
+            databaseInitializer.InitializeDatabase();
+
 
             app.UseAuthentication();
             app.UseAuthorization();
