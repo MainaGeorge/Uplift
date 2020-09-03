@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Uplift.DataAccess.Data.Repository.IRepository;
 using Uplift.Models;
+using Uplift.Utility;
 
 namespace Uplift.Areas.Admin.Controllers
 {
@@ -73,7 +74,8 @@ namespace Uplift.Areas.Admin.Controllers
         [HttpGet]
         public IActionResult GetAll()
         {
-            return Json(new { data = _unitOfWork.Category.GetAll() });
+            // return Json(new { data = _unitOfWork.Category.GetAll() });
+            return Json(new { data = _unitOfWork.CallStoredProcedure.GetList<Category>(AppConstants.GetCategoryStoredProcedure) });
         }
 
         [HttpDelete]

@@ -18,5 +18,7 @@ namespace Uplift.DataAccess.Data.Repository.IRepository
 
         IUserRepository User { get;  }
 
+        ICallStoredProcedure CallStoredProcedure { get;  }
+
     }
 }

@@ -15,6 +15,7 @@ namespace Uplift.DataAccess.Data.Repository
             OrderDetails = new OrderDetailsRepository(db);
             OrderHeader = new OrderHeaderRepository(db);
             User = new UserRepository(db);
+            CallStoredProcedure = new CallStoredProcedure(_db);
         }
         public void Dispose()
         {
@@ -33,5 +34,6 @@ namespace Uplift.DataAccess.Data.Repository
         public IOrderHeaderRepository OrderHeader { get; private set; }
         public IOrderDetailsRepository OrderDetails { get; private set; }
         public IUserRepository User { get; private set; }
+        public ICallStoredProcedure CallStoredProcedure { get; private set; }
     }
 }
