@@ -35,6 +35,7 @@ namespace Uplift
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
             services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddScoped<IDatabaseInitializer, DatabaseInitializer>();
 
             services.AddControllersWithViews()
                 .AddNewtonsoftJson()
@@ -43,14 +44,14 @@ namespace Uplift
 
             services.AddSession(opt =>
             {
-                opt.IdleTimeout = TimeSpan.FromMinutes(15);
+                opt.IdleTimeout = TimeSpan.FromMinutes(30);
                 opt.Cookie.HttpOnly = true;
                 opt.Cookie.IsEssential = true;
             });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IDatabaseInitializer databaseInitializer)
         {
             if (env.IsDevelopment())
             {
@@ -63,6 +64,9 @@ namespace Uplift
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+
+            databaseInitializer.InitializeDatabase();
+
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseSession();
